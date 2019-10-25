@@ -1,0 +1,69 @@
+const azero = require('azero-sdk');
+const azero_sdk = azero.sdk;
+
+const PUNCH_LINE_IntentRequestHandler = {
+    canHandle(handlerInput) {
+        return azero.getIntentConfirm(handlerInput,'PUNCH_LINE');
+    },
+    handle(handlerInput) {
+        let slot = azero.getSlotValue(handlerInput,"SlotName");
+        let jsonObject = JSON.parse(slot);
+        let slotNames = jsonObject.parameters;
+        //let speakOutput = jsonObject.answer;
+    if(slotNames.type ==='欢乐的'){
+       speakOutput = '这是一个欢乐的段子Demo';
+    }else{
+       speakOutput = '这是一个段子Demo';
+    }
+       
+        
+        return handlerInput.responseBuilder
+        	.addRenderTemplateDirective({
+        		type: `BodyTemplate1`,
+        		title: speakOutput,
+        		textContent: {
+        			"primaryText": {
+        			"text": speakOutput,
+        			"type": "string"
+        			}
+        		}
+        	})
+        	.speak(speakOutput)
+        	.withShouldEndSession(true)
+        	.getResponse();
+    }
+};
+
+const IntentRequestHandler = {
+    canHandle(handlerInput) {
+        return azero.getIntentRequest(handlerInput);
+    },
+    handle(handlerInput) {
+    	let slot = azero.getSlotValue(handlerInput,"SlotName");
+        let jsonObject = JSON.parse(slot);
+        let speakOutput = jsonObject.answer;
+        if(speakOutput ==null || speakOutput.length<1){
+            speakOutput = '??????';
+        }
+        return handlerInput.responseBuilder
+            .addRenderTemplateDirective({
+                type: `BodyTemplate1`,
+                title: speakOutput,
+                textContent: {
+                    "primaryText": {
+                        "text": speakOutput,
+                        "type": "string"
+                    }
+                }
+            })
+            .speak(speakOutput)
+            .withShouldEndSession(true)
+            .getResponse();
+    }
+};
+
+exports.handler = azero_sdk.SkillBuilders.custom()
+    .addRequestHandlers(
+        PUNCH_LINE_IntentRequestHandler,
+        IntentRequestHandler
+    ).lambda();
