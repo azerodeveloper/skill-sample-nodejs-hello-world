@@ -24,7 +24,7 @@
 
 ​	假想段子技能两种交互逻辑，具体如下：
 
-~~~
+```
 交互逻辑1(宽泛的):
 	用户：我想听一个段子。
 	Azero：您想要听什么类型的段子？
@@ -38,7 +38,7 @@
 	Azero：确认欢乐的段子吗？
 	用户：确认。
 	Azero：(段子具体内容)。
-~~~
+```
 
 ​	拆解交互逻辑，用户的意图是想听一个段子。段子类型有欢乐的、搞笑的等等。
 
@@ -64,7 +64,7 @@
 
 ​	点击意图管理 -> 创建自定义意图。 填写意图相关信息。
 
-​	**语料：**用户实现该意图的常用表达话术。键入“我想听一个段子”、“我想听一个 @CUSTOM.type:type 段子”。
+​	**语料：** 用户实现该意图的常用表达话术。键入“我想听一个段子”、“我想听一个 @CUSTOM.type:type 段子”。
 
 ![avatar](images/3.jpg)
 
@@ -76,7 +76,7 @@
 
 ![avatar](images/5.jpg)
 
-​	**槽位：**以Key-Value的形式，被Azero系统用Json传递给段子技能。只有当语料中有@槽位管理中的自定义槽位，槽位下才会自动生成槽位信息。
+​	**槽位：** 以Key-Value的形式，被Azero系统用Json传递给段子技能。只有当语料中有@槽位管理中的自定义槽位，槽位下才会自动生成槽位信息。
 
 ​	勾选必填，加入澄清话术。澄清话术是在用户没有明确指明想听那种类型的段子时，进一步引导客户，输入希望听的段子类型。键入“您想听什么类型的段子？”。
 
@@ -86,7 +86,7 @@
 
 
 
-​	**意图确认：**当意图状态开启时，对槽位中的槽位信息进行确认。如，相对槽位中的type(即段子类型)做意图确认，则键入“确认&”，页面会弹出想选择的槽位信息，如图：
+​	**意图确认：** 当意图状态开启时，对槽位中的槽位信息进行确认。如，相对槽位中的type(即段子类型)做意图确认，则键入“确认&”，页面会弹出想选择的槽位信息，如图：
 
 ![avatar](images/14.jpg)
 
@@ -110,7 +110,7 @@
 
 ​	下面对生成的代码进一步介绍。
 
-~~~
+```
 const PUNCH_LINE_IntentRequestHandler = {
     canHandle(handlerInput) {
         return azero.getIntentConfirm(handlerInput,'PUNCH_LINE');
@@ -152,11 +152,11 @@ const PUNCH_LINE_IntentRequestHandler = {
         	.getResponse();
     }
 };
-~~~
+```
 
 ​	PUNCH_LINE_IntentRequestHandler：技能服务如果匹配到意图(意图管理中配置的意图PUNCH_LINE),则在canHandle中返回true，会进到函数handle中进行技能逻辑处理。
 
-~~~
+```
 const IntentRequestHandler = {
     canHandle(handlerInput) {
         return azero.getIntentRequest(handlerInput);
@@ -185,19 +185,19 @@ const IntentRequestHandler = {
     }
 };
 
-~~~
+```
 
 ​	IntentRequestHandler：公共意图的处理函数，若意图request没有匹配到对应的意图Handler则执行该函数逻辑。即Azero将用户的语音意图已经给到本技能服务，但是在PUNCH_LINE_IntentRequestHandler中canhandle返回false时，执行该函数，对于用户请求做兜底处理。
 
 ​	将上面两个Handler注册到Azero服务中，即完成技能开发，点击保存代码，即完成服务部署。
 
-~~~
+```
 exports.handler = azero_sdk.SkillBuilders.custom()
     .addRequestHandlers(
         PUNCH_LINE_IntentRequestHandler,
         IntentRequestHandler
     ).lambda();
-~~~
+```
 
 ​	如需了解更多如何使用Node.js开发技能，请参考：
 
@@ -213,7 +213,7 @@ exports.handler = azero_sdk.SkillBuilders.custom()
 
 ​	服务器部署中修改代码如下：
 
-~~~ 
+``` 
 	const IntentRequestHandler = {
     canHandle(handlerInput) {
         return azero.getIntentRequest(handlerInput);
@@ -248,7 +248,7 @@ exports.handler = azero_sdk.SkillBuilders.custom()
             .getResponse();
     }
 };
-~~~
+```
 
 
 
@@ -292,7 +292,7 @@ exports.handler = azero_sdk.SkillBuilders.custom()
 
 ![avatar](images/12.jpg)
 
-​	根据您的设备，选择设备类型，此处选择**音箱**，**Android操作系统**，键入SoundAi，点击保存。
+​	根据您的设备，选择设备类型，此处选择 **音箱** ， **Android操作系统** ，键入SoundAi，点击保存。
 
 ​	跳转到设备信息页面键入设备的具体信息。
 
@@ -300,7 +300,7 @@ exports.handler = azero_sdk.SkillBuilders.custom()
 
 ​	页面将跳转到技能配置，Azero系统会为设备配置部门官方技能，如果您需要其他的技能也可以点击添加。
 
-​	选择**我的技能**，即可看到您已经发布成功的技能，选择**添加技能**，则您为您的设备添加自定义技能完毕。
+​	选择 **我的技能** ，即可看到您已经发布成功的技能，选择 **添加技能** ，则您为您的设备添加自定义技能完毕。
 
 ​	至此技能部署，及设备添加技能已经全部完成。
 
@@ -320,4 +320,4 @@ exports.handler = azero_sdk.SkillBuilders.custom()
 
 ​	详见当前目录下，code.txt。
 
-​	使用时，只需要复制PUNCH_LINE_IntentRequestHandler下，handle(handlerInput) {}函数中的代码到您服务部署下的**技能名_IntentRequestHandler**下的handle(handlerInput) {}函数中即可。
+​	使用时，只需要复制PUNCH_LINE_IntentRequestHandler下，handle(handlerInput) {}函数中的代码到您服务部署下的 **技能名_IntentRequestHandler** 下的handle(handlerInput) {}函数中即可。
